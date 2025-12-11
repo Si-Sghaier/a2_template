@@ -37,22 +37,18 @@ public class Engine {
         StringBuilder result = new StringBuilder();
         result.append("Tick ").append(currentTick).append(":\n");
 
-        // Tick all producers
         for (Producer producer : state.getProducers()) {
             producer.tick(new Context(this, state));
         }
 
-        // Tick all converters
         for (Converter converter : state.getConverters()) {
             converter.tick(new Context(this, state));
         }
 
-        // Tick all consumers
         for (Consumer consumer : state.getConsumers()) {
             consumer.tick(new Context(this, state));
         }
 
-        // Update history
         state.updateHistory();
 
         return result.toString();
@@ -73,16 +69,13 @@ public class Engine {
             File file = new File(dataDir, filename);
             PrintWriter writer = new PrintWriter(new FileWriter(file));
 
-            // Write current tick
             writer.println("CurrentTick," + currentTick);
 
-            // Write all resources
             for (ResourceType resource : ResourceType.values()) {
                 int amount = state.getResourceAmount(resource);
                 writer.println(resource + "," + amount);
             }
 
-            // Write all entities
             for (Producer producer : state.getProducers()) {
                 writer.println("Producer," + producer.getName() + "," + 
                     producer.getClass().getSimpleName() + "," + producer.toCSV());
@@ -141,13 +134,13 @@ public class Engine {
                 } else if (parts[0].equals("Consumer")) {
                     loadConsumer(parts);
                 } else {
-                    // Resource line
+                    // this is a resource line
                     try {
                         ResourceType resource = ResourceType.valueOf(parts[0]);
                         int amount = Integer.parseInt(parts[1]);
                         state.updateResource(resource, amount);
                     } catch (IllegalArgumentException e) {
-                        // Skip invalid resource types
+                        // skip invalid stuff
                     }
                 }
             }
@@ -164,17 +157,14 @@ public class Engine {
      * Creates one instance of each entity type.
      */
     public void initialiseDefaults() {
-        // Create producers
         state.getProducers().add(new org.uob.a2.model.WheatFarm("wheatfarm1"));
         state.getProducers().add(new org.uob.a2.model.SugarFarm("sugarfarm1"));
         state.getProducers().add(new org.uob.a2.model.ChickenCoop("chickencoop1"));
         state.getProducers().add(new org.uob.a2.model.DairyFarm("dairyfarm1"));
         
-        // Create converters
         state.getConverters().add(new org.uob.a2.model.FlourMill("flourmill1"));
         state.getConverters().add(new org.uob.a2.model.Oven("oven1"));
         
-        // Create consumers
         state.getConsumers().add(new org.uob.a2.model.BakeryShop("bakeryshop1"));
     }
 
@@ -206,7 +196,7 @@ public class Engine {
                 state.getProducers().add(producer);
             }
         } catch (Exception e) {
-            // Skip invalid producers
+            // skip if it's broken
         }
     }
 
@@ -232,7 +222,7 @@ public class Engine {
                 state.getConverters().add(converter);
             }
         } catch (Exception e) {
-            // Skip invalid converters
+            // skip if it's broken
         }
     }
 
@@ -250,14 +240,14 @@ public class Engine {
             Consumer consumer = null;
             if (type.equals("BakeryShop")) {
                 org.uob.a2.model.BakeryShop shop = new org.uob.a2.model.BakeryShop(name);
-                // CSV format: Consumer,name,type,name,resource,amount,level
+                // CSV format: Consumer,name,type,name,resource,amount,level (yeah name is duplicated, idk why)
                 // parts[3] = name (duplicate), parts[4] = resource, parts[5] = amount, parts[6] = level
                 if (parts.length >= 7) {
                     try {
                         int level = Integer.parseInt(parts[6]);
                         shop.setLevel(level);
                     } catch (NumberFormatException e) {
-                        // Ignore, use default level
+                        // just use default if parsing fails
                     }
                 }
                 consumer = shop;
@@ -266,7 +256,7 @@ public class Engine {
                 state.getConsumers().add(consumer);
             }
         } catch (Exception e) {
-            // Skip invalid consumers
+            // skip if it's broken
         }
     }
 }

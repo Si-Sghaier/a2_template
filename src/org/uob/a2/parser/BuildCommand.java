@@ -23,7 +23,6 @@ public class BuildCommand extends Command {
 
         String entityType = words.get(0).toLowerCase();
         
-        // Map entity type strings to classes
         org.uob.a2.engine.Entity newEntity = createEntity(entityType, ctx);
         
         if (newEntity == null) {
@@ -31,7 +30,6 @@ public class BuildCommand extends Command {
                    "wheatfarm, sugarfarm, chickencoop, dairyfarm, flourmill, oven, bakeryshop";
         }
 
-        // Check if we can afford it
         Map<ResourceType, Integer> costs = newEntity.getCosts();
         for (Map.Entry<ResourceType, Integer> cost : costs.entrySet()) {
             if (ctx.state().getResourceAmount(cost.getKey()) < cost.getValue()) {
@@ -40,12 +38,10 @@ public class BuildCommand extends Command {
             }
         }
 
-        // Remove costs
         for (Map.Entry<ResourceType, Integer> cost : costs.entrySet()) {
             ctx.state().removeResource(cost.getKey(), cost.getValue());
         }
 
-        // Add entity to appropriate list
         if (newEntity instanceof Producer) {
             ctx.state().getProducers().add((Producer) newEntity);
         } else if (newEntity instanceof Converter) {
@@ -58,12 +54,10 @@ public class BuildCommand extends Command {
     }
 
     private org.uob.a2.engine.Entity createEntity(String entityType, Context ctx) {
-        // Generate unique name
         String baseName = entityType;
         int counter = 1;
         String name = baseName + counter;
         
-        // Check for existing entities with same name pattern
         while (entityExists(name, ctx)) {
             counter++;
             name = baseName + counter;

@@ -36,7 +36,6 @@ public class GraphCommand extends Command {
             return "No history available for " + resourceName + ". Run some ticks first.";
         }
 
-        // Find max value for scaling
         int maxValue = 0;
         for (Map<ResourceType, Integer> snapshot : history) {
             int value = snapshot.getOrDefault(resource, 0);
@@ -49,12 +48,10 @@ public class GraphCommand extends Command {
             return "No data for " + resourceName + " in history.";
         }
 
-        // Build graph
         StringBuilder sb = new StringBuilder();
         sb.append("Graph of ").append(resourceName).append(" over time:\n");
         sb.append("Max value: ").append(maxValue).append("\n\n");
 
-        // Draw bars
         for (int i = 0; i < history.size(); i++) {
             Map<ResourceType, Integer> snapshot = history.get(i);
             int value = snapshot.getOrDefault(resource, 0);

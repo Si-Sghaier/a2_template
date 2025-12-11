@@ -16,7 +16,7 @@ public class CheatCommand extends Command {
 
     @Override
     public String execute(Context ctx) {
-        // Add large amounts of all resources
+        // give us tons of resources
         for (ResourceType resource : ResourceType.values()) {
             ctx.state().addResource(resource, 10000);
         }

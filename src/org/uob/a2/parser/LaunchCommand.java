@@ -22,7 +22,6 @@ public class LaunchCommand extends Command {
 
         String shopName = words.get(0);
         
-        // Find the bakery shop
         BakeryShop shop = null;
         for (Consumer consumer : ctx.state().getConsumers()) {
             if (consumer instanceof BakeryShop && consumer.getName().equals(shopName)) {

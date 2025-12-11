@@ -17,24 +17,20 @@ public class Parser {
      * @return A Command object representing the parsed command
      */
     public Command parse(String command) {
-        // Sanitize input
         if (command == null) {
             command = "";
         }
         
         command = command.trim();
         
-        // Default empty string to tick command
         if (command.isEmpty()) {
             return new TickCommand();
         }
         
-        // Convert to lowercase and split into words
         command = command.toLowerCase();
         String[] parts = command.split("\\s+");
         List<String> words = new ArrayList<>(Arrays.asList(parts));
         
-        // Remove empty strings
         words.removeIf(String::isEmpty);
         
         if (words.isEmpty()) {
@@ -43,7 +39,6 @@ public class Parser {
         
         String firstWord = words.get(0);
         
-        // Parse command based on first word
         switch (firstWord) {
             case "tick":
             case "t":
