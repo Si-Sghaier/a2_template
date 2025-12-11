@@ -1,0 +1,14 @@
+package org.uob.a2.model;
+
+public enum ResourceType {
+    ORE,
+    METAL,
+    CREDITS,
+    //KEEP THE ABOVE FOR TESTING BUT ADD YOUR OWN
+    WHEAT,
+    SUGAR,
+    EGGS,
+    MILK,
+    FLOUR,
+    CAKE
+}
